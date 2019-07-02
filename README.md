@@ -1,4 +1,4 @@
-#Trading Application
+# Trading Application
 
 This is the base structure for our automated day trading application. 
 
