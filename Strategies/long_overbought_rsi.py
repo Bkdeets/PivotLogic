@@ -15,6 +15,8 @@ TEST_UNIVERSE_BIG = ['MMM', 'ABT', 'ABBV', 'ACN', 'ATVI', 'AYI', 'ADBE', 'AMD', 
 TEST_UNIVERSE = ['AAPL'] #,'GOOG','MMM','TSLA','SPWR','SIRI','F','RRR','ACN', 'ATVI', 'AYI', 'ADBE', 'AMD', 'AAP','CHRW', 'CA', 'COG', 'CDNS', 'CPB', 'COF', 'CAH', 'KMX', 'CCL', 'CAT']
 period = 20
 NY = 'America/New_York'
+
+# TODO: create new api key and hide it
 api = tradeapi.REST(
     key_id='PKIG33U7XYR8ECVMMF4A',
     secret_key='e83t4Cn5oY07EENvlhRKwjKyTbykd8wn8Phesmze',
