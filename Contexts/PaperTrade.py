@@ -7,6 +7,7 @@ import alpaca_trade_api as tradeapi
 
 class PaperTrade(Context):
 
+    isPaper = True
     TEST_UNIVERSE = ['AAPL', 'GOOG', 'MMM', 'TSLA', 'SPWR', 'SIRI', 'F', 'RRR', 'ACN']
 
     def __init__(self):
@@ -29,3 +30,14 @@ class PaperTrade(Context):
 
     def get_account(self):
         return self.get_api().get_account()
+
+    def list_positions(self):
+        return self.get_api().list_positions()
+
+    def get_barset(self, symbols, timeframe, limit, start, end):
+        return self.get_api().get_barset(
+            symbols,
+            timeframe,
+            limit=limit,
+            start=start,
+            end=end)

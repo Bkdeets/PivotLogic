@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-def get_prices(api, symbols, timeframe, start, end, limit=50, tz='America/New_York'):
+def get_prices(context, symbols, timeframe, start, end=None, limit=50, tz='America/New_York'):
     '''
     Gets prices for list of symbols and returns a pandas df
 
@@ -12,12 +12,12 @@ def get_prices(api, symbols, timeframe, start, end, limit=50, tz='America/New_Yo
     2019-06-21 11:55:00-04:00  199.850  199.980  199.810  ...  28.410  28.435   6169
     '''
 
-    start = pd.Timestamp('09:30', tz=tz) - pd.Timedelta(days=1)
-    end = pd.Timestamp.now(tz=tz)
+    if not end:
+        end = pd.Timestamp.now(tz=tz)
 
     # List of Bars
     def get_barset(symbols):
-        return api.get_barset(
+        return context.get_barset(
             symbols,
             timeframe,
             limit=limit,

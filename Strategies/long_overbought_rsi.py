@@ -31,7 +31,7 @@ def checkToSell(RSI):
     return False
 
 
-def get_orders(api, prices_df, position_size=200, max_positions=5):
+def get_orders(context, prices_df, position_size=200, max_positions=5):
 
     # rank the stocks based on the indicators.
     RSIs = []
@@ -51,11 +51,11 @@ def get_orders(api, prices_df, position_size=200, max_positions=5):
 
     to_buy = []
     to_sell = []
-    account = api.get_account()
+    account = context.get_account()
 
     # now get the current positions and see what to buy,
     # what to sell to transition to today's desired portfolio.
-    positions = api.list_positions()
+    positions = context.list_positions()
     logger.info(positions)
 
     holdings = {p.symbol: p for p in positions}
@@ -158,7 +158,7 @@ def trade(orders, wait=30):
 
 
 def getTradableAssets(context):
-    if context.isPaper():
+    if context.isPaper:
         return context.TEST_UNIVERSE
     assets = []
     for asset in api.list_assets(asset_class='us_equity', status='active'):
@@ -177,7 +177,8 @@ def beginTrading(context):
             tradeable_assets = getTradableAssets(context)
 
             logger.info('Getting prices...')
-            prices_df = util.get_prices(tradeable_assets)
+            start = pd.Timestamp.now() - pd.Timedelta(days=2)
+            prices_df = util.get_prices(context, tradeable_assets, timeframe='5Min', start=start)
 
             logger.info('Getting orders...')
             orders = get_orders(context, prices_df)
@@ -192,4 +193,4 @@ def beginTrading(context):
         time.sleep(60*5)
 
 
-beginTrading(PaperTrade)
+beginTrading(PaperTrade())
