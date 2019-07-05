@@ -14,3 +14,15 @@ class Context(ABC):
     @abstractmethod
     def sell(self, ticker, order_type, units, limit_price=None):
         return
+
+    @abstractmethod
+    def get_api(self):
+        return
+
+    @abstractmethod
+    def get_clock(self):
+        return
+
+    @abstractmethod
+    def get_account(self):
+        return

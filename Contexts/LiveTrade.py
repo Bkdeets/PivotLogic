@@ -13,3 +13,6 @@ class LiveTrade(Context):
 
     def sell(self, ticker, order_type, units, limit_price=None):
         return
+
+    def get_api(self):
+        return

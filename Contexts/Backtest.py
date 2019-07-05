@@ -3,7 +3,7 @@ from Contexts.Context import Context
 
 # class to implement Context methods that execute in a backtesting environment
 
-class LiveTrade(Context):
+class Backtest(Context):
 
     def __init__(self):
         super().__init__()
@@ -12,4 +12,7 @@ class LiveTrade(Context):
         return
 
     def sell(self, ticker, order_type, units, limit_price=None):
+        return
+
+    def get_api(self):
         return
