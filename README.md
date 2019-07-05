@@ -24,3 +24,14 @@ the trading logic.
 ### Indicators
 This file will hold calculations for indicators that some 
 strategies will be built on.
+
+
+<br>
+
+### SDK
+This will hold utility classes and functions
+
+<br>
+
+### Test
+Unit tests
