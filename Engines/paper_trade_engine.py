@@ -2,7 +2,8 @@ import logging
 import pandas as pd
 from SDK import Utilities as util
 import time
-
+from Strategies.macross import MACrossPaper
+from Contexts.PaperTrade import PaperTrade
 
 '''
 This will be a lambda function that hits a 'Fargate' thing which handles the long-running 
@@ -11,7 +12,7 @@ trade thread...
 The trade thread stops eod (4:00 eastern) and the state is saved then queued
 for execution whenever the market opens tomorrow
 '''
-def beginTrading(self, context, strategy_instance):
+def beginTrading(context, strategy_instance):
     logging.info('start running')
     timeframe_map = {
         '1Min': 1,
@@ -19,7 +20,7 @@ def beginTrading(self, context, strategy_instance):
         'day' : 5
     }
 
-    sleep = timeframe_map.get(strategy_instance.params.timeframe)
+    sleep = timeframe_map.get(strategy_instance.params.get('timeframe'))
 
     # This user notation is just for demo purposes,
     # we will have to call backend to see if strategy for user is active
@@ -28,14 +29,14 @@ def beginTrading(self, context, strategy_instance):
         clock = context.get_clock()
         now = clock.timestamp
         if clock.is_open:
-            tradeable_assets = strategy_instance.params.assets
+            tradeable_assets = strategy_instance.params.get('assets')
 
             strategy_instance.logger.info('Getting prices...')
             start = pd.Timestamp.now() - pd.Timedelta(days=2)
             prices_df = util.get_prices(
                 context,
                 tradeable_assets,
-                timeframe=strategy_instance.params.timeframe,
+                timeframe=strategy_instance.params.get('timeframe'),
                 start=start)
 
             strategy_instance.logger.info('Getting orders...')
@@ -52,3 +53,13 @@ def beginTrading(self, context, strategy_instance):
 class User:
     def hasStrategyActive(self, id):
         return True
+
+
+params = {
+    'period': 20,
+    'timeframe': '1Min',
+    'assets': ['AAPL', 'TSLA']
+}
+strat = MACrossPaper(params)
+
+beginTrading(PaperTrade(), strat)

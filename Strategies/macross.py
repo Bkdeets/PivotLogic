@@ -13,12 +13,12 @@ import matplotlib.pyplot as plt
 
 class MACrossPaper(Strategy):
 
-
     def __init__(self, params):
         self.logger = logging.getLogger(__name__)
         logging.basicConfig(level=logging.DEBUG)
 
         self.NY = 'America/New_York'
+        self.id = 1
 
         # TODO: create new api key and hide it
         self.api = None
