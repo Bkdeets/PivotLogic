@@ -18,11 +18,6 @@ class Strategy(ABC):
     def __init__(self):
         return
 
-    @property
-    @abstractmethod
-    def params(self):
-        return
-
     @abstractmethod
     def sort_func(self, indicator_obj):
         return

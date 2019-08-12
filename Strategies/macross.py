@@ -13,15 +13,16 @@ import matplotlib.pyplot as plt
 
 class MACrossPaper(Strategy):
 
-    def __init__(self):
+
+    def __init__(self, params):
         self.logger = logging.getLogger(__name__)
         logging.basicConfig(level=logging.DEBUG)
 
-        self.period = 20
         self.NY = 'America/New_York'
 
         # TODO: create new api key and hide it
         self.api = None
+        self.params = params
 
 
     def sort_func(self, sma_obj):
@@ -53,7 +54,7 @@ class MACrossPaper(Strategy):
 
         c = 0
         for symbol in symbols:
-            sma = SMA(self.period, prices_df[symbol].dropna(), symbol)
+            sma = SMA(self.params.period, prices_df[symbol].dropna(), symbol)
             c += 1
             smas.append(sma)
 
@@ -109,100 +110,3 @@ class MACrossPaper(Strategy):
             self.logger.info(f'order(buy): {symbol} for {shares}')
             max_to_buy -= 1
         return orders
-
-
-    def trade(self, orders, wait=30):
-        '''This is where we actually submit the orders and wait for them to fill.
-        Waiting is an important step since the orders aren't filled automatically,
-        which means if your buys happen to come before your sells have filled,
-        the buy orders will be bounced. In order to make the transition smooth,
-        we sell first and wait for all the sell orders to fill before submitting
-        our buy orders.
-        '''
-
-        # process the sell orders first
-        sells = [o for o in orders if o['side'] == 'sell']
-        for order in sells:
-            try:
-                self.logger.info(f'submit(sell): {order}')
-                self.api.submit_order(
-                    symbol=order['symbol'],
-                    qty=order['qty'],
-                    side='sell',
-                    type='market',
-                    time_in_force='day',
-                )
-            except Exception as e:
-                self.logger.error(e)
-        count = wait
-        while count > 0 and len(sells) > 0:
-            pending = self.api.list_orders()
-            if len(pending) == 0:
-                self.logger.info(f'all sell orders done')
-                break
-            self.logger.info(f'{len(pending)} sell orders pending...')
-            time.sleep(1)
-            count -= 1
-
-        # process the buy orders next
-        buys = [o for o in orders if o['side'] == 'buy']
-        for order in buys:
-            try:
-                self.logger.info(f'submit(buy): {order}')
-                self.api.submit_order(
-                    symbol=order['symbol'],
-                    qty=order['qty'],
-                    side='buy',
-                    type='market',
-                    time_in_force='day',
-                )
-            except Exception as e:
-                self.logger.error(e)
-        count = wait
-        while count > 0 and len(buys) > 0:
-            pending = self.api.list_orders()
-            if len(pending) == 0:
-                self.logger.info(f'all buy orders done')
-                break
-            self.logger.info(f'{len(pending)} buy orders pending...')
-            time.sleep(1)
-            count -= 1
-
-
-    def getTradableAssets(self, context):
-        if context.isPaper:
-            return context.TEST_UNIVERSE
-        assets = []
-        for asset in self.api.list_assets(asset_class='us_equity', status='active'):
-            asset = self.api.get_asset(asset.symbol)
-            if asset.tradable:
-                assets.append(asset.symbol)
-        return assets
-
-
-    def beginTrading(self, context):
-        logging.info('start running')
-        while True:
-            clock = context.get_clock()
-            now = clock.timestamp
-            if clock.is_open:
-                tradeable_assets = self.getTradableAssets(context)
-
-                self.logger.info('Getting prices...')
-                start = pd.Timestamp.now() - pd.Timedelta(days=2)
-                prices_df = util.get_prices(context, tradeable_assets, timeframe='5Min', start=start)
-
-                self.logger.info('Getting orders...')
-                orders = self.get_orders(context, prices_df)
-
-                self.logger.info(orders)
-                self.trade(orders)
-
-                self.logger.info(context.get_account())
-
-                self.logger.info(f'done for {clock.timestamp}')
-
-            time.sleep(60*5)
-
-
-    beginTrading(PaperTrade())
