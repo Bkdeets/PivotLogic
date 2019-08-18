@@ -16,7 +16,10 @@ phases:
       - rsync -aP . $PYTHON_LIB_DIR/tideline --exclude python
   post_build:
     commands:
-      - aws lambda publish-layer-version --layer-name PythonDependencies --content S3Bucket=$BUCKET,S3Key=lambda_layer.zip --compatible-runtimes python3.7
+      - aws lambda publish-layer-version \
+        --layer-name PythonDependencies \
+        --content S3Bucket=$BUCKET,S3Key=lambda_layer.zip \
+        --compatible-runtimes python3.7
 
 artifacts:
   files:
