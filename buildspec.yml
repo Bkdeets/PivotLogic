@@ -3,7 +3,7 @@ version: 0.2
 env:
   variables:
     PYTHON_LIB_DIR: 'python/lib/python3.7/site-packages'
-    BUCKET: "tideline-073588985313-lambda-layer"
+    BUCKET: 'tideline-073588985313-lambda-layer'
 
 phases:
   install:
@@ -14,7 +14,13 @@ phases:
       - echo ⚙️🐍 Installing Python dependencies 🐍⚙️
       - pip install -r requirements.txt -t $PYTHON_LIB_DIR
       - rsync -aP . $PYTHON_LIB_DIR/tideline --exclude python
-  
+  post_build:
+    commands:
+      - aws lambda publish-layer \
+        --layer-name PythonDependencies \
+        --content S3Bucket=$BUCKET,S3Key=lambda_layer.zip \
+        --compatible-runtimes python3.7
+
 artifacts:
   files:
     - $PYTHON_LIB_DIR/**/*
