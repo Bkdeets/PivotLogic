@@ -16,8 +16,9 @@ phases:
       - rsync -aP . $PYTHON_LIB_DIR/Tideline --exclude python
   post_build:
     commands:
+      - echo 😴😴 Waiting for S3 Upload 😴😴
+      - sleep 10s 
       - |
-        sleep 10s
         aws lambda publish-layer-version \
           --layer-name PythonDependencies \
           --content S3Bucket=$BUCKET,S3Key=lambda_layer.zip \
