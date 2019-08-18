@@ -1,0 +1,20 @@
+version: 0.2
+
+env:
+  variables:
+    PYTHON_LIB_DIR: 'python/lib/python3.7/site-packages'
+    BUCKET: "tideline-073588985313-lambda-layer"
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.7
+  build:
+    commands:
+      - echo ⚙️🐍 Installing Python dependencies 🐍⚙️
+      - pip install -r requirements.txt -t $PYTHON_LIB_DIR
+      - cp -a . $PYTHON_LIB_DIR
+  
+artifacts:
+  files:
+    - $PYTHON_LIB_DIR/**/*
