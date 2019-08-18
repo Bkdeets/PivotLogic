@@ -12,8 +12,8 @@ phases:
   build:
     commands:
       - echo ⚙️🐍 Installing Python dependencies 🐍⚙️
-      - pip install -r requirements.txt -t $PYTHON_LIB_DIR/Tideline
-      - rsync -aP . $PYTHON_LIB_DIR --exclude python
+      - pip install -r requirements.txt -t $PYTHON_LIB_DIR
+      - rsync -aP . $PYTHON_LIB_DIR/Tideline --exclude python
   
 artifacts:
   files:
