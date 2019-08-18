@@ -17,6 +17,7 @@ phases:
   post_build:
     commands:
       - |
+        sleep 10s
         aws lambda publish-layer-version \
           --layer-name PythonDependencies \
           --content S3Bucket=$BUCKET,S3Key=lambda_layer.zip \
