@@ -13,7 +13,7 @@ phases:
     commands:
       - echo ⚙️🐍 Installing Python dependencies 🐍⚙️
       - pip install -r requirements.txt -t $PYTHON_LIB_DIR
-      - cp -a . $PYTHON_LIB_DIR
+      - cp -r * $PYTHON_LIB_DIR
   
 artifacts:
   files:
