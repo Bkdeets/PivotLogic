@@ -1,9 +1,7 @@
-import datetime  # For datetime objects
 import backtrader as bt
-import backtrader.feeds as btfeeds
 import pandas as pd
-from Contexts.Backtest import Backtest
-from BrokerWrapper import Wrapper
+from Tideline.Contexts.Backtest import Backtest
+from Tideline.BrokerWrapper import Wrapper
 
 class MACDLongBacktest(bt.Strategy):
     params = (

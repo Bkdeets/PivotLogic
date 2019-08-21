@@ -1,14 +1,5 @@
-from abc import ABC, abstractmethod, abstractproperty
-import alpaca_trade_api as tradeapi
-from SDK import Utilities as util
-from Contexts.Backtest import Backtest
-from Contexts.LiveTrade import LiveTrade
-from Contexts.PaperTrade import PaperTrade
-import pandas as pd
-import time
-import logging
-from Indicators.sma import SMA
-import matplotlib.pyplot as plt
+from abc import ABC, abstractmethod
+
 
 # Abstract Class that specifies methods common among Backtest, PaperTrade, and live Trade
 # https://github.com/alpacahq/alpaca-trade-api-python

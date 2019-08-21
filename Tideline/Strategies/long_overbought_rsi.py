@@ -1,15 +1,9 @@
-import alpaca_trade_api as tradeapi
-from SDK import Utilities as util
-from Contexts.Backtest import Backtest
-from Contexts.LiveTrade import LiveTrade
-from Contexts.PaperTrade import PaperTrade
+from Tideline.SDK import Utilities as util
+from Tideline.Contexts.PaperTrade import PaperTrade
 import pandas as pd
 import time
 import logging
-from Indicators.rsi import RSI
-import matplotlib.pyplot as plt
-
-
+from Tideline.Indicators.rsi import RSI
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)

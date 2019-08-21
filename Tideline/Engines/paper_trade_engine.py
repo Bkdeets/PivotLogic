@@ -1,9 +1,9 @@
 import logging
 import pandas as pd
-from SDK import Utilities as util
+from Tideline.SDK import Utilities as util
 import time
-from Strategies.macross import MACrossPaper
-from Contexts.PaperTrade import PaperTrade
+from Tideline.Strategies.macross import MACrossPaper
+from Tideline.Contexts.PaperTrade import PaperTrade
 
 '''
 This will be a lambda function that hits a 'Fargate' thing which handles the long-running 

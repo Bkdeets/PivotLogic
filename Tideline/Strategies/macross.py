@@ -1,14 +1,6 @@
-import alpaca_trade_api as tradeapi
-from SDK import Utilities as util
-from Contexts.Backtest import Backtest
-from Contexts.LiveTrade import LiveTrade
-from Contexts.PaperTrade import PaperTrade
-import pandas as pd
-import time
 import logging
-from Indicators.sma import SMA
-from Strategies.strategy import Strategy
-import matplotlib.pyplot as plt
+from Tideline.Indicators import SMA
+from Tideline.Strategies import Strategy
 
 
 class MACrossPaper(Strategy):

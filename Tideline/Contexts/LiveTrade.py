@@ -1,4 +1,4 @@
-from Contexts.Context import Context
+from Tideline.Contexts.Context import Context
 
 # class to implement Context methods that execute in a live trading environment
 

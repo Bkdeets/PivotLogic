@@ -1,15 +1,12 @@
-import datetime  # For datetime objects
 import backtrader as bt
-import backtrader.feeds as btfeeds
 import pandas as pd
-from Contexts.Backtest import Backtest
-from BrokerWrapper import Wrapper
+from Tideline.Contexts.Backtest import Backtest
+from Tideline.BrokerWrapper import Wrapper
 
-class LongOverboughtRSIBacktest(bt.Strategy):
+class MACross(bt.Strategy):
     params = (
-        ('period', 20),
+        ('maperiod', 15),
         ('printlog', True),
-        ('threshold', 70),
     )
 
     def log(self, txt, dt=None, doprint=False):
@@ -27,10 +24,9 @@ class LongOverboughtRSIBacktest(bt.Strategy):
         self.buyprice = None
         self.buycomm = None
 
-        # Add a RSI indicator
-        self.rsi = bt.indicators.RSI(
-            self.datas[0],
-            period=self.params.period)
+        # Add a MovingAverageSimple indicator
+        self.sma = bt.indicators.SimpleMovingAverage(
+            self.datas[0], period=self.params.maperiod)
 
     def notify_order(self, order):
         if order.status in [order.Submitted, order.Accepted]:
@@ -82,7 +78,7 @@ class LongOverboughtRSIBacktest(bt.Strategy):
         if not self.position:
 
             # Not yet ... we MIGHT BUY if ...
-            if self.rsi[0] >= self.params.threshold:
+            if self.dataclose[0] > self.sma[0]:
 
                 # BUY, BUY, BUY!!! (with all possible default parameters)
                 self.log('BUY CREATE, %.2f' % self.dataclose[0])
@@ -92,7 +88,7 @@ class LongOverboughtRSIBacktest(bt.Strategy):
 
         else:
 
-            if self.rsi[0] < self.params.threshold:
+            if self.dataclose[0] < self.sma[0]:
                 # SELL, SELL, SELL!!! (with all possible default parameters)
                 self.log('SELL CREATE, %.2f' % self.dataclose[0])
 
@@ -101,7 +97,7 @@ class LongOverboughtRSIBacktest(bt.Strategy):
 
     def stop(self):
         self.log('(MA Period %2d) Ending Value %.2f' %
-                 (self.params.period, self.broker.getvalue()), doprint=True)
+                 (self.params.maperiod, self.broker.getvalue()), doprint=True)
 
 
 if __name__ == '__main__':
@@ -114,7 +110,7 @@ if __name__ == '__main__':
     #     MACross,
     #     maperiod=range(10, 31))
 
-    cerebro.addstrategy(LongOverboughtRSIBacktest, period=10, threshold=60)
+    cerebro.addstrategy(MACross, maperiod=20)
 
     # Get shtuff from Alpaca via a wrapper
     start = pd.Timestamp.now() - pd.Timedelta(days=365)
