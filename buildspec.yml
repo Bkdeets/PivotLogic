@@ -13,11 +13,11 @@ phases:
     commands:
       - echo ⚙️🐍 Installing Python dependencies 🐍⚙️
       - pip install -r requirements.txt -t $PYTHON_LIB_DIR
-      - rsync -aP . $PYTHON_LIB_DIR/Tideline --exclude python
+      - rsync -aP . $PYTHON_LIB_DIR/ --exclude python
   post_build:
     commands:
       - echo 😴😴 Waiting for S3 Upload 😴😴
-      - sleep 10s 
+      - sleep 60s
       - |
         aws lambda publish-layer-version \
           --layer-name PythonDependencies \
