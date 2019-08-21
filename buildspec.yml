@@ -17,7 +17,7 @@ phases:
   post_build:
     commands:
       - echo 😴😴 Waiting for S3 Upload 😴😴
-      - sleep 60s
+      - sleep 200s
       - |
         aws lambda publish-layer-version \
           --layer-name PythonDependencies \
