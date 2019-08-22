@@ -1,6 +1,9 @@
 import logging
-from Tideline.Indicators import SMA
-from Tideline.Strategies import Strategy
+from Tideline.Indicators import sma
+from Tideline.Strategies import strategy
+
+SMA = sma.SMA
+Strategy = strategy.Strategy
 
 
 class MACrossPaper(Strategy):
@@ -31,12 +34,12 @@ class MACrossPaper(Strategy):
     def checkToBuy(self, smas):
         toBuy = []
         for sma in smas:
-            if sma.sma < sma.prices.iloc[-1,:].close:
+            if sma.sma[-1] < sma.prices.iloc[-1,:].close:
                 toBuy.append(sma)
         return toBuy
 
 
-    def get_orders(self, context, prices_df, position_size=200, max_positions=5):
+    def get_orders(self, context, prices_df, position_size=.02, max_positions=5):
 
         # rank the stocks based on the indicators.
         smas = []
@@ -46,7 +49,7 @@ class MACrossPaper(Strategy):
 
         c = 0
         for symbol in symbols:
-            sma = SMA(self.params.period, prices_df[symbol].dropna(), symbol)
+            sma = SMA(self.params.get('period'), prices_df[symbol].dropna(), symbol)
             c += 1
             smas.append(sma)
 
@@ -88,10 +91,13 @@ class MACrossPaper(Strategy):
         # desired portfolio, buy them. We sent a limit for the total
         # position size so that we don't end up holding too many positions.
         max_to_buy = max_positions - (len(positions) - len(to_sell))
+
+        portfolio_value = self.API.get_account().portfolio_value
+
         for symbol in to_buy:
             if max_to_buy <= 0:
                 break
-            shares = position_size // float(prices_df[symbol].close.values[-1])
+            shares = (portfolio_value * position_size) // float(prices_df[symbol].close.values[-1])
             if shares == 0.0:
                 continue
             orders.append({
