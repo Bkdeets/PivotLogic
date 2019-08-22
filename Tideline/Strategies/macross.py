@@ -1,11 +1,16 @@
 import logging
 from Tideline.Indicators import sma
 from Tideline.Strategies import strategy
+import alpaca_trade_api as tradeapi
 SMA = sma.SMA
 Strategy = strategy.Strategy
 
 
 class MACrossPaper(Strategy):
+    API = tradeapi.REST(
+        key_id='PKIG33U7XYR8ECVMMF4A',
+        secret_key='e83t4Cn5oY07EENvlhRKwjKyTbykd8wn8Phesmze',
+        base_url='https://paper-api.alpaca.markets')
 
     def __init__(self, params):
         self.logger = logging.getLogger(__name__)
@@ -14,8 +19,7 @@ class MACrossPaper(Strategy):
         self.NY = 'America/New_York'
         self.id = 1
 
-        # TODO: create new api key and hide it
-        self.api = None
+
         self.params = params
 
 
