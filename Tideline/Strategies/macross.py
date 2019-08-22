@@ -95,11 +95,12 @@ class MACrossPaper(Strategy):
         # position size so that we don't end up holding too many positions.
         max_to_buy = max_positions - (len(positions) - len(to_sell))
 
-        portfolio_value = self.API.get_account().portfolio_value
+        portfolio_value = float(self.API.get_account().portfolio_value)
 
         for symbol in to_buy:
             if max_to_buy <= 0:
                 break
+
             shares = (portfolio_value * position_size) // float(prices_df[symbol].close.values[-1])
             if shares == 0.0:
                 continue
