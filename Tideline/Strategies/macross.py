@@ -1,7 +1,6 @@
 import logging
 from Tideline.Indicators import sma
 from Tideline.Strategies import strategy
-
 SMA = sma.SMA
 Strategy = strategy.Strategy
 

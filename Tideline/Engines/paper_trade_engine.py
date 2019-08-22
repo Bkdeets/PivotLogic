@@ -57,8 +57,8 @@ class User:
 
 params = {
     'period': 20,
-    'timeframe': '1Min',
-    'assets': ['AAPL', 'TSLA']
+    'timeframe': '5Min',
+    'assets': ['AAPL', 'TSLA', 'SIRI', 'F', 'BAC', 'RRR', 'SPY', 'ZNGA', 'TGT', 'KLAC', 'FIT']
 }
 strat = MACrossPaper(params)
 
