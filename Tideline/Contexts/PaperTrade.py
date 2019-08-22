@@ -78,9 +78,9 @@ class PaperTrade(Context):
 
     def get_api(self):
         return tradeapi.REST(
-            key_id='PKIG33U7XYR8ECVMMF4A',
-            secret_key='e83t4Cn5oY07EENvlhRKwjKyTbykd8wn8Phesmze',
-            base_url='https://paper-api.alpaca.markets')
+        key_id='PKJK7XMI9126SRRT2TKP',
+        secret_key='s7zZAtP3Q2EbaBc0GH1BqYE6TudeeRpZ21K1Bjco',
+        base_url='https://paper-api.alpaca.markets')
 
     def get_clock(self):
         return self.get_api().get_clock()
